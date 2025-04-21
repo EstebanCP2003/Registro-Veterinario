@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'go-agent' // o usa docker { image 'golang:1.21' }
+    }
     stages {
         stage('Clonar repositorio') {
             steps {
@@ -8,7 +10,7 @@ pipeline {
         }
         stage('Ejecutar pruebas') {
             steps {
-                sh 'go test ./... -v -json > report.json'
+                sh 'go test -v ./... | tee result.out | go-junit-report > report.xml'
             }
         }
         stage('Build') {
@@ -16,10 +18,10 @@ pipeline {
                 sh 'go build'
             }
         }
-        post {
-            always {
-                junit 'report.json' // si generas reporte JUnit
-            }
+    }
+    post {
+        always {
+            junit 'report.xml'
         }
     }
 }
