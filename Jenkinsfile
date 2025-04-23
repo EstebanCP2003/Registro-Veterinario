@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'agent2' // Esto asegura que todo corre en agent2
-    }
+    agent any // Utiliza cualquier agente disponible
     stages {
         // stage('Clonar repositorio') {
         //     steps {
