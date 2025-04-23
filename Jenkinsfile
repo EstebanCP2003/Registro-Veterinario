@@ -11,7 +11,9 @@ pipeline {
         stage('Ejecutar pruebas') {
             steps {
                 sh '''
-                    go test -v ./... | tee result.out | go-junit-report > report.xml
+                    go install github.com/jstemmer/go-junit-report@latest
+                    go test -v ./... | tee result.out
+                    $HOME/go/bin/go-junit-report < result.out > report.xml
                 '''
             }
         }
